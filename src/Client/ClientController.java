@@ -8,16 +8,15 @@ import java.util.Scanner;
 
 import DTO.Packet;
 
-public class Client extends Thread {
+public class ClientController extends Thread {
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	Scanner sc;
 	
-	public Client(Socket socket) throws IOException {
+	public ClientController(Socket socket) throws IOException {
 		this.oos = new ObjectOutputStream(socket.getOutputStream());
 		this.ois = new ObjectInputStream(socket.getInputStream());
 		sc = new Scanner(System.in);
-		System.out.println("test");
 	}
 	
 	@Override
@@ -28,7 +27,7 @@ public class Client extends Thread {
 			while (true) {
 				packet = (Packet) ois.readObject(); // 패킷을 읽는다
 
-				switch(packet.code) { // 코드 해석
+				switch(packet.getCode()) { // 코드 해석
 				
 					default : break;
 				}

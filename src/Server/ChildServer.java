@@ -23,7 +23,7 @@ public class ChildServer extends Thread {
 			Packet packet;
 			while (true) {
 				packet = (Packet) ois.readObject(); // 패킷 받기
-				switch(packet.code) { // 패킷 해석
+				switch(packet.getCode()) { // 패킷 해석
 					default : break;
 				}
 			}

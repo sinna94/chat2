@@ -17,6 +17,7 @@ public class Client extends Thread {
 		this.oos = new ObjectOutputStream(socket.getOutputStream());
 		this.ois = new ObjectInputStream(socket.getInputStream());
 		sc = new Scanner(System.in);
+		System.out.println("test");
 	}
 	
 	@Override

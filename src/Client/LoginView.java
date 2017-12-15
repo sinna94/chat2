@@ -1,5 +1,7 @@
 package Client;
 
+import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
@@ -12,14 +14,20 @@ import javax.swing.JTextField;
 
 public class LoginView extends JFrame{
 	private static final long serialVersionUID = 1L;
+	private JLabel titleLabel = new JLabel("보디보디");
 	private JLabel idLabel = new JLabel("ID");
 	private JLabel pwdLabel = new JLabel("Password");
 	private JTextField idField = new JTextField();
 	private JTextField pwdField = new JTextField();
 	private JButton loginBtn = new JButton("로그인");
 	private JButton registerBtn = new JButton("회원가입");
+	private Font font = new Font("Serif", Font.BOLD, 40);
 	
 	public LoginView() {
+		JPanel title = new JPanel();
+		titleLabel.setFont(font);
+		title.add(titleLabel);
+		this.add(title, BorderLayout.NORTH);
 		JPanel content = new JPanel();
 		content.setLayout(new GridLayout(3, 2));
 		content.add(idLabel);
@@ -29,7 +37,7 @@ public class LoginView extends JFrame{
 		content.add(loginBtn);
 		content.add(registerBtn);
 		this.setBounds(500, 300, 300, 200);
-		this.setContentPane(content);
+		this.add(content, BorderLayout.CENTER);
 		this.setTitle("Login View");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}

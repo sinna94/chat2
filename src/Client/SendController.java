@@ -26,6 +26,8 @@ public class SendController { // 클라이언트에서 발생한 이벤트를 처리하고 서버에 
 		loginView.addLoginListener(new LoginListener());
 		loginView.addRegisterListener(new RegisterListener());
 		this.registerView = registerView;
+		registerView.addEnterListener(new EnterListener());
+		registerView.addCancelListener(new CancelListener());
 		this.mainView = mainView;
 		this.messageView = messageView;
 		this.packet = new Packet();
@@ -37,7 +39,7 @@ public class SendController { // 클라이언트에서 발생한 이벤트를 처리하고 서버에 
 		oos.flush();
 		oos.reset();
 	}
-	
+	// 로그인 버튼 리스너(로그인 뷰)
 	class LoginListener implements ActionListener { // 로그인 뷰의 로그인버튼 리스너
 		String id;
 		String pwd;
@@ -58,12 +60,30 @@ public class SendController { // 클라이언트에서 발생한 이벤트를 처리하고 서버에 
 			}
 		}	
 	}
-	
+	// 레지스터 버튼 리스너(로그인 뷰)
 	class RegisterListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			RegisterView registerView = new RegisterView();
+			registerView.setVisible(true);
+		}	
+	}
+	// 확인 버튼 리스너(회원가입 뷰)
+	class EnterListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
 			
-		}	
+		}
+	}
+	// 취소 버튼 리스너(회원가입 뷰)
+	class CancelListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 }

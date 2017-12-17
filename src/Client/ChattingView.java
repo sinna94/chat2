@@ -1,11 +1,13 @@
 package Client;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -19,6 +21,7 @@ import javax.swing.table.TableColumnModel;
 
 public class ChattingView extends JFrame{
 	private static final long serialVersionUID = 1L;
+	private JLabel titleLabel = new JLabel("대화 하기");
 	private JTextArea textArea = new JTextArea(10, 30);
 	private JScrollPane scroll = new JScrollPane(textArea);
 	private JTable friendTable;
@@ -27,10 +30,15 @@ public class ChattingView extends JFrame{
 	private JButton enterBtn = new JButton("입력");
 	private JButton exitBtn = new JButton("종료");
 	private JTextField textField = new JTextField();
+	private Font font = new Font("Serif", Font.BOLD, 30);
 	
 	public ChattingView() {
 		JPanel mainPanel = new JPanel(); // 전체를 감싸는 패널
 		mainPanel.setLayout(new BorderLayout());
+		JPanel title = new JPanel();
+		titleLabel.setFont(font);
+		title.add(titleLabel);
+		mainPanel.add(title, BorderLayout.NORTH);
 		mainPanel.add(scroll, BorderLayout.WEST);
 		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
 	    dtcr.setHorizontalAlignment(SwingConstants.CENTER); // 렌더러의 가로정렬을 CENTER
@@ -63,7 +71,7 @@ public class ChattingView extends JFrame{
 		mainPanel.add(southPanel, BorderLayout.SOUTH); // 메인패널의 아래에 배치
 		this.add(mainPanel); // 전체를 감싸는 패널 추가
 		this.setBounds(500, 200, 500, 400);
-		this.setTitle("Main View");
+		this.setTitle("Chatting View");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 

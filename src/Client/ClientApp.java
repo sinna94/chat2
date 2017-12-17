@@ -5,8 +5,8 @@ import java.net.UnknownHostException;
 
 public class ClientApp {
 	public static void main(String[] args) throws UnknownHostException, IOException{
-		ChattingView chatView = new ChattingView();
-		chatView.setVisible(true);
+		MessageView msgView = new MessageView();
+		msgView.setVisible(true);
 		//Client client = new Client();
 	}
 }

@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import DTO.Account;
+import DTO.Packet;
+
 public class DAO {
 	/*  PreparedStatement 사용 이유
 		반복해서 실행되는 동일 쿼리의 속도를 증가시키기 위해
@@ -30,26 +33,25 @@ public class DAO {
 			System.out.println("연결에 실패했습니다.");
 		}
 	}
-
-	public ResultSet executeQuery(String query) {
-		ResultSet rs = null;
-		try {
-			pstmt = con.prepareStatement(query);
-			rs = pstmt.executeQuery();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		
+	public boolean checkLoginDB(Packet packet) throws SQLException {
+		Account account = (Account) packet.getData(); // 패킷으로부터 데이터(계정) 얻기
+		String query = "SELECT * FROM Account WHERE ID = ?, Password = ?";
+		
+		pstmt = con.prepareStatement(query); // PreparedStatement 객체 생성
+		pstmt.setString(1, account.getId()); // 아이디 세팅
+		pstmt.setString(2, account.getPassword()); // 비밀번호 세팅
+		ResultSet rs = pstmt.executeQuery(); // 데이터를 검색하므로 executeQuery를 사용한다
+		
+		while(rs.next()) {
+			account.setId(rs.getString("ID")); // 데이터베이스로부터 아이디와 이름을 받는다
+			account.setName(rs.getString("Name"));
 		}
-		return rs;
-	}
-
-	public int updateQuery(String query) {
-		int result = 0;
-		try {
-			pstmt = con.prepareStatement(query);
-			result = pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
+		rs.close();
+		pstmt.close();
+		
+		if(account.getId() == null) // 검색된 내용이 없으면 false
+			return false;
+		else return true;
 	}
 }

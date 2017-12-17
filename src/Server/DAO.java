@@ -33,9 +33,8 @@ public class DAO {
 			System.out.println("연결에 실패했습니다.");
 		}
 	}
-		
-	public boolean checkLoginDB(Packet packet) throws SQLException {
-		Account account = (Account) packet.getData(); // 패킷으로부터 데이터(계정) 얻기
+
+	public boolean checkLoginDB(Account account) throws SQLException {
 		String query = "SELECT * FROM Account WHERE ID = ?, Password = ?";
 		
 		pstmt = con.prepareStatement(query); // PreparedStatement 객체 생성
@@ -53,5 +52,27 @@ public class DAO {
 		if(account.getId() == null) // 검색된 내용이 없으면 false
 			return false;
 		else return true;
+	}
+
+	public int registDB(Account account) throws SQLException {
+		String id = account.getId();
+		String pw = account.getPassword();
+		String name = account.getName();
+		String phone = account.getPhone();
+		String addr = account.getAddress();
+		
+		String query = "INSERT INTO Student ('" + id + "','" + pw + "','" + name + "','" + phone + "','" + addr  +"')"
+	            + "VALUES(?, ?, ?, ?, ?, ?)";
+		
+		pstmt = con.prepareStatement(query);
+		pstmt.setString(1, id);
+		pstmt.setString(2, pw);
+		pstmt.setString(3, name);
+		pstmt.setString(4, phone);
+		pstmt.setString(5, addr);
+		
+		int result = pstmt.executeUpdate(query);
+		
+		return result;
 	}
 }

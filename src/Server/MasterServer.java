@@ -29,7 +29,7 @@ public class MasterServer {
 			while(true) {
 				Socket socket = ss.accept();
 				System.out.println(socket.getInetAddress() + "가 접속하였습니다.");
-				ChildServer csvr = new ChildServer(socket, dao);
+				ChildServer csvr = new ChildServer(socket);
 				csvr.start();
 				childList.add(csvr);
 			} 

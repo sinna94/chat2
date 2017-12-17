@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
 
+import DTO.Account;
 import DTO.Packet;
 
 public class ChildServer extends Thread {
@@ -30,7 +31,7 @@ public class ChildServer extends Thread {
 				packet = (Packet) ois.readObject(); // 패킷 받기
 				switch (packet.getCode()) { // 패킷 해석
 				case "REQ_LOGIN":			// 로그인 요청
-					checkLogin(packet);
+					checkLogin((Account)packet.getData());
 					break;
 
 				default:
@@ -48,21 +49,39 @@ public class ChildServer extends Thread {
 		}
 	}
 
-	public void checkLogin(Packet packet) throws SQLException, IOException {
-		boolean result = dao.checkLoginDB(packet);
-		
-		if(result == true){ // DB 체크 결과
+	public void checkLogin(Account account) throws SQLException{
+		boolean result = dao.checkLoginDB(account);
+
+		if (result == true) { // DB 체크 결과
 			packet.setCode("LOGIN_SUC");
-		}
-		else{
+		} 
+		else {
 			packet.setCode("LOGIN_FAIL");
 		}
-		oos.writeObject(packet);
+		sendPacket(packet);
+	}
+	
+	public void regist(Account account) throws SQLException{
+		int result = dao.registDB(account);
+		
+		if (result == 0 ){
+			packet.setCode("REGI_FAIL");
+		}
+		else{
+			packet.setCode("REGI_SUCC");
+		}
+		
+		sendPacket(packet);
 	}
 
-	public void sendPacket(Packet packet) throws IOException {
-		oos.writeObject(packet);
-		oos.flush();
-		oos.reset();
+	public void sendPacket(Packet packet){
+		try {
+			oos.writeObject(packet);
+			oos.flush();
+			oos.reset();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

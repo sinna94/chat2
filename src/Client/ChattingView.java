@@ -1,61 +1,42 @@
 package Client;
 
-import java.awt.Font;
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-public class ChattingView {
+public class ChattingView extends JFrame{
 	private static final long serialVersionUID = 1L;
-	private JLabel titleLabel = new JLabel("환영합니다.");
-	private JButton addBtn = new JButton("친구 추가");
-	private JButton removeBtn = new JButton("친구 삭제");
-	private JButton msgBtn = new JButton("쪽지 보내기");
-	private JButton chatBtn = new JButton("대화 하기");
-	private JButton exitBtn = new JButton("종료");
-	private JLabel friendListLabel = new JLabel("접속중인 친구목록");
+	private JTextArea textArea = new JTextArea(10, 30);
+	private JScrollPane scroll = new JScrollPane(textArea);
 	private JTable friendTable;
 	private DefaultTableModel model;
 	private JScrollPane js;
-	private Font font = new Font("Serif", Font.BOLD, 30);
-	private Font font2 = new Font("Times", Font.BOLD, 20);
+	private JButton enterBtn = new JButton("입력");
+	private JButton exitBtn = new JButton("종료");
+	private JTextField textField = new JTextField();
 	
 	public ChattingView() {
 		JPanel mainPanel = new JPanel(); // 전체를 감싸는 패널
-		JPanel northPanel = new JPanel(); // 위쪽 패널
-		northPanel.setLayout(new GridLayout(3, 1));
-		titleLabel.setFont(font); // 폰트 적용
-		titleLabel.setHorizontalAlignment(JLabel.CENTER); // 가운데 정렬
-		northPanel.add(titleLabel); // 타이틀레이블은 위쪽
-		JPanel btnPanel = new JPanel(); // 5개의 버튼을 감싸는 패널
-		btnPanel.setLayout(new GridLayout(1, 5));
-		btnPanel.add(addBtn); // 친구추가 버튼
-		btnPanel.add(removeBtn); // 친구삭제 버튼
-		btnPanel.add(msgBtn); // 쪽지보내기 버튼
-		btnPanel.add(chatBtn); // 대화하기 버튼
-		btnPanel.add(exitBtn); // 종료 버튼
-		northPanel.add(btnPanel); // 버튼패널은 가운데
-		friendListLabel.setFont(font2); // 폰트 적용
-		friendListLabel.setHorizontalAlignment(JLabel.CENTER); // 가운데정렬
-		northPanel.add(friendListLabel); // 친구목록레이블은 아래쪽
-		mainPanel.add(northPanel); // 메인패널에 달아준다
-		JPanel centerPanel = new JPanel(); // 가운데 패널
+		mainPanel.setLayout(new BorderLayout());
+		mainPanel.add(scroll, BorderLayout.WEST);
 		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
 	    dtcr.setHorizontalAlignment(SwingConstants.CENTER); // 렌더러의 가로정렬을 CENTER
 		// 대국 목록 테이블 정의
-		String[] col = { "아이디", "이름", "상태" }; // 첫행에 표시될 배열
-		String[][] row = new String[0][3];
+		String[] col = {"아이디"}; // 첫행에 표시될 배열
+		String[][] row = new String[0][1];
 
 		model = new DefaultTableModel(row, col) { // 테이블 모델 생성
 			private static final long serialVersionUID = 1L;
@@ -66,15 +47,22 @@ public class ChattingView {
 		friendTable = new JTable(model); // 테이블 생성
 		model = (DefaultTableModel) friendTable.getModel();
 		js = new JScrollPane(friendTable); // 스크롤 달아주기
-		friendTable.getTableHeader().setReorderingAllowed(false); // 방목록 테이블 컴포넌트 고정
-		friendTable.getTableHeader().setResizingAllowed(false); // 크기 조절 불가
 		TableColumnModel tcm = friendTable.getColumnModel(); // 정렬할 테이블의 컬럼모델을 가져옴
 		for (int i = 0; i < tcm.getColumnCount(); i++)
 			tcm.getColumn(i).setCellRenderer(dtcr);
-		centerPanel.add(js); // 친구목록테이블 가운데
-		mainPanel.add(centerPanel); // 메인패널에 달아준다
+		friendTable.getColumnModel().getColumn(0).setPreferredWidth(5);
+		mainPanel.add(js); // 오른쪽
+		JPanel southPanel = new JPanel();
+		southPanel.setLayout(new GridLayout(2, 1));
+		JPanel btnPanel = new JPanel();
+		btnPanel.setLayout(new GridLayout(1, 2));
+		btnPanel.add(enterBtn);
+		btnPanel.add(exitBtn);
+		southPanel.add(textField); // 텍스트필드 추가
+		southPanel.add(btnPanel); // 아래패널에 버튼패널 추가
+		mainPanel.add(southPanel, BorderLayout.SOUTH); // 메인패널의 아래에 배치
 		this.add(mainPanel); // 전체를 감싸는 패널 추가
-		this.setBounds(500, 200, 600, 650);
+		this.setBounds(500, 200, 500, 400);
 		this.setTitle("Main View");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -83,22 +71,10 @@ public class ChattingView {
 		JOptionPane.showMessageDialog(this, errMessage);
 	}
 
-	public void addAddListener(ActionListener aal) {
-		addBtn.addActionListener(aal);
+	public void addEnterListener(ActionListener aal) {
+		enterBtn.addActionListener(aal);
 	}
 
-	public void addRemoveListener(ActionListener ral) {
-		removeBtn.addActionListener(ral);
-	}
-	
-	public void addMsgListener(ActionListener ral) {
-		msgBtn.addActionListener(ral);
-	}
-	
-	public void addChatListener(ActionListener ral) {
-		chatBtn.addActionListener(ral);
-	}
-	
 	public void addExitListener(ActionListener ral) {
 		exitBtn.addActionListener(ral);
 	}

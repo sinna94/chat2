@@ -70,15 +70,22 @@ public class DAO {
 	}
 	
 	public boolean addFriendDB(String myId, String friendId) throws SQLException {
-		String query = "INSERT INTO Friends(UserID, FriendID) VALUES(?, ?)";
-		
+		// 친구등록할 사용자가 존재하는지 먼저 검색한다
+		String query = "SELECT * FROM Account WHERE ID = ?";
 		pstmt = con.prepareStatement(query);
-		pstmt.setString(1, myId);
-		pstmt.setString(2, friendId);
-
-		// 리턴값이 없으면(정상적으로 등록되지 않은경우) false
-		if(pstmt.executeUpdate() == 0) return false;
-		else return true;
+		pstmt.setString(1, friendId);
+		ResultSet rs = pstmt.executeQuery(); // 데이터를 검색하므로 executeQuery를 사용한다
+		// rs가 존재하면 친구등록 쿼리를 실행한다
+		if(rs.next()) {
+			query = "INSERT INTO Friends(UserID, FriendID) VALUES(?, ?)";
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, myId);
+			pstmt.setString(2, friendId);
+			// 리턴값이 없으면(정상적으로 등록되지 않은경우) false
+			if(pstmt.executeUpdate() == 0) return false;
+			else return true;
+		}
+		return false; // rs가 없으면 false
 	}
 	
 	public boolean removeFriendDB(String myId, String friendId) throws SQLException {

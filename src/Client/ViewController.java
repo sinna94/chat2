@@ -162,7 +162,7 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 	class MsgListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			inputView.dispose(); // 입력 뷰 닫기
+			messageView = new MessageView();
 		}
 	}
 
@@ -170,14 +170,14 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 	class ChatListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			inputView.dispose(); // 입력 뷰 닫기
+			chattingView = new ChattingView();
 		}
 	}
 	// 종료 버튼 리스너(메인 뷰)
 	class ExitListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			mainView.dispose(); // 입력 뷰 닫기
+			mainView.dispose(); // 메인 뷰 닫기
 		}
 	}
 }

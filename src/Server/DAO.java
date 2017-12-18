@@ -82,7 +82,7 @@ public class DAO {
 	}
 	
 	public boolean removeFriendDB(String myId, String friendId) throws SQLException {
-		String query = "INSERT INTO Account(UserID, FriendID) VALUES(?, ?)";
+		String query = "DELETE FROM Friends WHERE UserID = ? AND FriendID = ?";
 		
 		pstmt = con.prepareStatement(query);
 		pstmt.setString(1, myId);

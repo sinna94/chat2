@@ -42,6 +42,10 @@ public class ChildServer extends Thread {
 				case "REQ_ADD": // 模备 眠啊 夸没
 					addFriend((String) packet.getData());
 					break;
+					
+				case "REQ_REMOVE": // 模备 昏力 夸没
+					removeFriend((String) packet.getData());
+					break;
 				default:
 					break;
 				}

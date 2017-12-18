@@ -31,11 +31,6 @@ public class ViewController { // ºä¿¡¼­ ¹ß»ýÇÑ ÀÌº¥Æ®¸¦ Ã³¸®ÇÏ°í ¼­¹ö¿¡ º¸³»´Â Å
 		this.loginView = loginView;
 		loginView.addLoginListener(new LoginListener()); // ·Î±×ÀÎ¹öÆ° ¸®½º³Ê(·Î±×ÀÎ ºä)
 		loginView.addRegisterListener(new RegisterListener()); // È¸¿ø°¡ÀÔ¹öÆ° ¸®½º³Ê(·Î±×ÀÎ ºä)
-		mainView.addAddListener(new InputListener("REQ_ADD")); // Ä£±¸Ãß°¡¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
-		mainView.addRemoveListener(new InputListener("REQ_REMOVE")); // Ä£±¸»èÁ¦¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
-		mainView.addMsgListener(new MsgListener()); // ÂÊÁöº¸³»±â¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
-		mainView.addChatListener(new ChatListener()); // Ã¤ÆÃÇÏ±â¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
-		mainView.addExitListener(new ExitListener()); // Á¾·á¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
 		this.packet = new Packet();
 	}
 	
@@ -46,14 +41,17 @@ public class ViewController { // ºä¿¡¼­ ¹ß»ýÇÑ ÀÌº¥Æ®¸¦ Ã³¸®ÇÏ°í ¼­¹ö¿¡ º¸³»´Â Å
 		oos.reset();
 	}
 	
-	public void closeLoginView() { // ·Î±×ÀÎºä¸¦ ´Ý´Â ¸Þ¼Òµå
-		loginView.dispose();
+	public void setMainView(MainView mainView) { // ¸ÞÀÎºä¸¦ ÂüÁ¶ÇÏ´Â ¸Þ¼Òµå
+		this.mainView = mainView;
 	}
 	
-	public void closeRegisterView() { // È¸¿ø°¡ÀÔºä¸¦ ´Ý´Â ¸Þ¼Òµå
-		registerView.dispose();
+	public void addMainViewListener() { // ¸ÞÀÎºä¿¡ ¸®½º³Ê¸¦ ´Þ¾ÆÁÖ´Â ¸Þ¼Òµå
+		mainView.addAddListener(new InputListener("REQ_ADD")); // Ä£±¸Ãß°¡¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
+		mainView.addRemoveListener(new InputListener("REQ_REMOVE")); // Ä£±¸»èÁ¦¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
+		mainView.addMsgListener(new MsgListener()); // ÂÊÁöº¸³»±â¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
+		mainView.addChatListener(new ChatListener()); // Ã¤ÆÃÇÏ±â¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
+		mainView.addExitListener(new ExitListener()); // Á¾·á¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
 	}
-	
 	// ·Î±×ÀÎ ¹öÆ° ¸®½º³Ê(·Î±×ÀÎ ºä)
 	class LoginListener implements ActionListener { // ·Î±×ÀÎ ºäÀÇ ·Î±×ÀÎ¹öÆ° ¸®½º³Ê
 		@Override
@@ -71,6 +69,7 @@ public class ViewController { // ºä¿¡¼­ ¹ß»ýÇÑ ÀÌº¥Æ®¸¦ Ã³¸®ÇÏ°í ¼­¹ö¿¡ º¸³»´Â Å
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			loginView.dispose(); // ·Î±×ÀÎ ºä ´Ý±â
 		}	
 	}
 	// È¸¿ø°¡ÀÔ ¹öÆ° ¸®½º³Ê(·Î±×ÀÎ ºä)
@@ -106,6 +105,7 @@ public class ViewController { // ºä¿¡¼­ ¹ß»ýÇÑ ÀÌº¥Æ®¸¦ Ã³¸®ÇÏ°í ¼­¹ö¿¡ º¸³»´Â Å
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			registerView.dispose(); // È¸¿ø°¡ÀÔ ºä ´Ý±â
 		}
 	}
 	// Ãë¼Ò ¹öÆ° ¸®½º³Ê(È¸¿ø°¡ÀÔ ºä)
@@ -123,7 +123,7 @@ public class ViewController { // ºä¿¡¼­ ¹ß»ýÇÑ ÀÌº¥Æ®¸¦ Ã³¸®ÇÏ°í ¼­¹ö¿¡ º¸³»´Â Å
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			inputView = new InputView(code);
+			inputView = new InputView();
 			// ÀÔ·Â¹öÆ°ÀÇ ¸®½º³Ê¿¡ code¸¦ ³Ö¾îÁØ´Ù(Ãß°¡, »èÁ¦¸¦ ±¸ºÐÇÏ°¡À§ÇÔ)
 			inputView.addEnterListener(new InputEnterListener(code)); 
 			inputView.addCancelListener(new InputCancelListener());
@@ -148,6 +148,7 @@ public class ViewController { // ºä¿¡¼­ ¹ß»ýÇÑ ÀÌº¥Æ®¸¦ Ã³¸®ÇÏ°í ¼­¹ö¿¡ º¸³»´Â Å
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			inputView.dispose(); // ÀÔ·Â ºä ´Ý±â
 		}
 	}
 	// Ãë¼Ò ¹öÆ° ¸®½º³Ê(ÀÔ·Â ºä)

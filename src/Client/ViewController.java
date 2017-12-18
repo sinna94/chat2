@@ -16,7 +16,7 @@ import DTO.Packet;
 
 public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 클래스(controller)
 	private ObjectOutputStream oos;
-	private ClientModel clientModel;
+	private ClientModel clntModel;
 	private LoginView loginView;
 	private RegisterView registerView;
 	private MainView mainView;
@@ -27,7 +27,7 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 	
 	public ViewController(Socket socket, ClientModel clientModel, LoginView loginView) throws IOException {
 		this.oos = new ObjectOutputStream(socket.getOutputStream());
-		this.clientModel = clientModel;
+		this.clntModel = clientModel;
 		this.loginView = loginView;
 		loginView.addLoginListener(new LoginListener()); // 로그인버튼 리스너(로그인 뷰)
 		loginView.addRegisterListener(new RegisterListener()); // 회원가입버튼 리스너(로그인 뷰)
@@ -138,7 +138,9 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Object data = inputView.getText(); // 스트링객체를 object로 업캐스팅(패킷의 데이터는 object형식)
+			// 모델에서 자신의 아이디와 추가할 아이디를 합친다.(#로 구분)
+			String str = clntModel.getMyId() + "#" + inputView.getText();
+			Object data = str; // 스트링객체를 object로 업캐스팅(패킷의 데이터는 object형식)
 			packet.setCode(code); // 패킷의 코드명을 입력(친구추가 또는 삭제)
 			packet.setData(data); // data set
 			try {

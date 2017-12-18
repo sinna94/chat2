@@ -18,7 +18,7 @@ import javax.swing.table.TableColumnModel;
 
 public class MainView extends JFrame { // 메인 뷰 클래스
 	private static final long serialVersionUID = 1L;
-	private JLabel titleLabel = new JLabel("환영합니다.");
+	private JLabel titleLabel = new JLabel();
 	private JButton addBtn = new JButton("친구 추가");
 	private JButton removeBtn = new JButton("친구 삭제");
 	private JButton msgBtn = new JButton("쪽지 보내기");
@@ -31,10 +31,11 @@ public class MainView extends JFrame { // 메인 뷰 클래스
 	private Font font = new Font("Serif", Font.BOLD, 30);
 	private Font font2 = new Font("Times", Font.BOLD, 20);
 	
-	public MainView() {
+	public MainView(String myId) {
 		JPanel mainPanel = new JPanel(); // 전체를 감싸는 패널
 		JPanel northPanel = new JPanel(); // 위쪽 패널
 		northPanel.setLayout(new GridLayout(3, 1));
+		titleLabel.setText(myId + "님 환영합니다."); // 입력한 아이디를 텍스트에 삽입
 		titleLabel.setFont(font); // 폰트 적용
 		titleLabel.setHorizontalAlignment(JLabel.CENTER); // 가운데 정렬
 		northPanel.add(titleLabel); // 타이틀레이블은 위쪽

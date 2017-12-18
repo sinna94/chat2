@@ -68,4 +68,28 @@ public class DAO {
 		if(pstmt.executeUpdate() == 0) return false;
 		else return true;
 	}
+	
+	public boolean addFriendDB(String myId, String friendId) throws SQLException {
+		String query = "INSERT INTO Friends(UserID, FriendID) VALUES(?, ?)";
+		
+		pstmt = con.prepareStatement(query);
+		pstmt.setString(1, myId);
+		pstmt.setString(2, friendId);
+
+		// 리턴값이 없으면(정상적으로 등록되지 않은경우) false
+		if(pstmt.executeUpdate() == 0) return false;
+		else return true;
+	}
+	
+	public boolean removeFriendDB(String myId, String friendId) throws SQLException {
+		String query = "INSERT INTO Account(UserID, FriendID) VALUES(?, ?)";
+		
+		pstmt = con.prepareStatement(query);
+		pstmt.setString(1, myId);
+		pstmt.setString(2, friendId);
+
+		// 리턴값이 없으면(정상적으로 등록되지 않은경우) false
+		if(pstmt.executeUpdate() == 0) return false;
+		else return true;
+	}
 }

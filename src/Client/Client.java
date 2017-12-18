@@ -19,7 +19,8 @@ public class Client {
 	public void Start() {
 		logView.setVisible(true); // 로그인화면 출력
 		try {
-			RecieveController recvCon = new RecieveController(socket, vc); // 서버로부터 패킷을받는 리시브컨트롤러 객체 생성
+			// 서버로부터 패킷을받는 리시브컨트롤러 객체 생성
+			RecieveController recvCon = new RecieveController(socket, clntModel, vc);
 			recvCon.start(); // 스레드 실행
 		} catch (Exception ie) {
 			System.out.println(ie.getMessage());

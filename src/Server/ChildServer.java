@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.StringTokenizer;
 
 import DTO.Account;
 import DTO.Packet;
@@ -37,7 +38,10 @@ public class ChildServer extends Thread {
 				case "REQ_REGISTER":			// 회원가입 요청
 					regist((Account)packet.getData());
 					break;
-					
+				
+				case "REQ_ADD": // 친구 추가 요청
+					addFriend((String) packet.getData());
+					break;
 				default:
 					break;
 				}
@@ -53,16 +57,19 @@ public class ChildServer extends Thread {
 		}
 	}
 
-	public void checkLogin(Account account) throws SQLException{
+	public void checkLogin(Account account) throws SQLException {
 		boolean result = dao.checkLoginDB(account);
 		// DB 체크 결과
-		if (result == true) packet.setCode("LOGIN_SUC");
+		if (result == true) {
+			packet.setCode("LOGIN_SUC");
+			packet.setData(account.getId()); // 로그인이 성공하면 요청한 ID를 반납
+		}
 		else packet.setCode("LOGIN_FAIL");
 		// 패킷 전송
 		sendPacket(packet);
 	}
 	
-	public void regist(Account account) throws SQLException{
+	public void regist(Account account) throws SQLException {
 		boolean result = dao.registDB(account);
 		// DB체크 결과
 		if (result == true) packet.setCode("REGI_SUC");
@@ -70,7 +77,33 @@ public class ChildServer extends Thread {
 		// 패킷 전송
 		sendPacket(packet);
 	}
-
+	
+	public void addFriend(String data) throws SQLException {
+		StringTokenizer st = new StringTokenizer(data, "#"); // #으로 구분된 문자열을 분리
+		String myId = st.nextToken(); // 첫번째 토큰은 자신의 ID
+		String friendId = st.nextToken(); // 두번째 토큰은 추가할 친구의 ID
+		
+		boolean result = dao.addFriendDB(myId, friendId); // DB에 친구추가 요청
+		// DB체크 결과
+		if (result == true) packet.setCode("ADD_SUC");
+		else packet.setCode("ADD_FAIL");
+		// 패킷 전송
+		sendPacket(packet);
+	}
+	
+	public void removeFriend(String data) throws SQLException {
+		StringTokenizer st = new StringTokenizer(data, "#"); // #으로 구분된 문자열을 분리
+		String myId = st.nextToken(); // 첫번째 토큰은 자신의 ID
+		String friendId = st.nextToken(); // 두번째 토큰은 추가할 친구의 ID
+		
+		boolean result = dao.removeFriendDB(myId, friendId); // DB에 친구삭제 요청
+		// DB체크 결과
+		if (result == true) packet.setCode("REMOVE_SUC");
+		else packet.setCode("REMOVE_FAIL");
+		// 패킷 전송
+		sendPacket(packet);
+	}
+	
 	public void sendPacket(Packet packet){
 		try {
 			oos.writeObject(packet);
@@ -79,6 +112,5 @@ public class ChildServer extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 }

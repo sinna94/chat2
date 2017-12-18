@@ -10,10 +10,12 @@ import DTO.Packet;
 
 public class RecieveController extends Thread { // 서버로부터 패킷을 받는 클래스(controller)
 	private ObjectInputStream ois;
+	private ClientModel clntModel;
 	private ViewController vc;
 	
-	public RecieveController(Socket socket, ViewController vc) throws IOException {
+	public RecieveController(Socket socket, ClientModel clntModel, ViewController vc) throws IOException {
 		this.ois = new ObjectInputStream(socket.getInputStream());
+		this.clntModel = clntModel;
 		this.vc = vc;
 	}
 	
@@ -27,7 +29,8 @@ public class RecieveController extends Thread { // 서버로부터 패킷을 받는 클래스
 
 				switch(packet.getCode()) { // 코드 해석
 					case "LOGIN_SUC": // 로그인이 성공하면 메인 뷰 생성
-						MainView mainView = new MainView();
+						clntModel.setMyId((String) packet.getData()); // 모델에 자신의 ID데이터를 삽입
+						MainView mainView = new MainView(clntModel.getMyId()); // 메인뷰에 ID를 인자로 넘김
 						mainView.setVisible(true);
 						vc.closeLoginView(); // 로그인뷰 닫기
 						break;

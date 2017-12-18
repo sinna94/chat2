@@ -24,7 +24,7 @@ public class RecieveController extends Thread { // 서버로부터 패킷을 받는 클래스
 
 			while (true) {
 				packet = (Packet) ois.readObject(); // 패킷을 읽는다
-				System.out.println(packet.getCode());
+
 				switch(packet.getCode()) { // 코드 해석
 					case "LOGIN_SUC": // 로그인이 성공하면 메인 뷰 생성
 						MainView mainView = new MainView();
@@ -36,9 +36,11 @@ public class RecieveController extends Thread { // 서버로부터 패킷을 받는 클래스
 						break;
 					case "REGI_SUC":  // 회원가입 성공시 메시지 출력
 						JOptionPane.showMessageDialog(null, "회원가입 성공");
+						vc.closeRegisterView(); // 회원가입 뷰 닫기
 						break;
 					case "REGI_FAIL": // 회원가입 실패시 메시지 출력
 						JOptionPane.showMessageDialog(null, "회원가입 실패");
+						vc.closeRegisterView(); // 회원가입 뷰 닫기
 						break;
 					default : break;
 				}

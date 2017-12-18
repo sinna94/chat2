@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import DTO.Account;
-import DTO.Packet;
 
 public class DAO {
 	/*  PreparedStatement 사용 이유
@@ -50,15 +49,14 @@ public class DAO {
 		return false; // rs가 없으면 false
 	}
 
-	public int registDB(Account account) throws SQLException {
+	public boolean registDB(Account account) throws SQLException {
 		String id = account.getId();
 		String pw = account.getPassword();
 		String name = account.getName();
 		String phone = account.getPhone();
 		String addr = account.getAddress();
 		
-		String query = "INSERT INTO Account ('" + id + "','" + pw + "','" + name + "','" + phone + "','" + addr + "')"
-				+ "VALUES(?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Account(ID, Password, Name, Address, Phone) VALUES(?, ?, ?, ?, ?)";
 		
 		pstmt = con.prepareStatement(query);
 		pstmt.setString(1, id);
@@ -66,9 +64,8 @@ public class DAO {
 		pstmt.setString(3, name);
 		pstmt.setString(4, phone);
 		pstmt.setString(5, addr);
-		
-		int result = pstmt.executeUpdate(query);
-		
-		return result;
+		// 리턴값이 없으면(정상적으로 등록되지 않은경우) false
+		if(pstmt.executeUpdate() == 0) return false;
+		else return true;
 	}
 }

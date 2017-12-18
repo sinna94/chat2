@@ -55,26 +55,19 @@ public class ChildServer extends Thread {
 
 	public void checkLogin(Account account) throws SQLException{
 		boolean result = dao.checkLoginDB(account);
-
-		if (result == true) { // DB 체크 결과
-			packet.setCode("LOGIN_SUC");
-		} 
-		else {
-			packet.setCode("LOGIN_FAIL");
-		}
+		// DB 체크 결과
+		if (result == true) packet.setCode("LOGIN_SUC");
+		else packet.setCode("LOGIN_FAIL");
+		// 패킷 전송
 		sendPacket(packet);
 	}
 	
 	public void regist(Account account) throws SQLException{
-		int result = dao.registDB(account);
-		
-		if (result == 0 ){
-			packet.setCode("REGI_FAIL");
-		}
-		else{
-			packet.setCode("REGI_SUC");
-		}
-		
+		boolean result = dao.registDB(account);
+		// DB체크 결과
+		if (result == true) packet.setCode("REGI_SUC");
+		else packet.setCode("REGI_FAIL");
+		// 패킷 전송
 		sendPacket(packet);
 	}
 

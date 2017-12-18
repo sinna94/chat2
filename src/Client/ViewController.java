@@ -39,6 +39,10 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 		loginView.dispose();
 	}
 	
+	public void closeRegisterView() { // 회원가입뷰를 닫는 메소드
+		registerView.dispose();
+	}
+	
 	// 로그인 버튼 리스너(로그인 뷰)
 	class LoginListener implements ActionListener { // 로그인 뷰의 로그인버튼 리스너
 		@Override
@@ -58,7 +62,7 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 			}
 		}	
 	}
-	// 레지스터 버튼 리스너(로그인 뷰)
+	// 회원가입 버튼 리스너(로그인 뷰)
 	class RegisterListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {

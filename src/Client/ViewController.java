@@ -9,7 +9,7 @@ import java.net.Socket;
 import DTO.Account;
 import DTO.Packet;
 
-public class SendController { // 클라이언트에서 발생한 이벤트를 처리하고 서버에 보내는 클래스(controller)
+public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 클래스(controller)
 	private ObjectOutputStream oos;
 	private ClientModel clientModel;
 	private LoginView loginView;
@@ -19,7 +19,7 @@ public class SendController { // 클라이언트에서 발생한 이벤트를 처리하고 서버에 
 	private ChattingView chattingView;
 	private Packet packet;
 	
-	public SendController(Socket socket, ClientModel clientModel, LoginView loginView) throws IOException {
+	public ViewController(Socket socket, ClientModel clientModel, LoginView loginView) throws IOException {
 		this.oos = new ObjectOutputStream(socket.getOutputStream());
 		this.clientModel = clientModel;
 		this.loginView = loginView;
@@ -34,6 +34,11 @@ public class SendController { // 클라이언트에서 발생한 이벤트를 처리하고 서버에 
 		oos.flush();
 		oos.reset();
 	}
+	
+	public void closeLoginView() { // 로그인뷰를 닫는 메소드
+		loginView.dispose();
+	}
+	
 	// 로그인 버튼 리스너(로그인 뷰)
 	class LoginListener implements ActionListener { // 로그인 뷰의 로그인버튼 리스너
 		@Override
@@ -58,13 +63,13 @@ public class SendController { // 클라이언트에서 발생한 이벤트를 처리하고 서버에 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			registerView = new RegisterView();
-			registerView.addEnterListener(new EnterListener());
-			registerView.addCancelListener(new CancelListener());
+			registerView.addEnterListener(new RegisterEnterListener());
+			registerView.addCancelListener(new RegisterCancelListener());
 			registerView.setVisible(true);
 		}	
 	}
 	// 확인 버튼 리스너(회원가입 뷰)
-	class EnterListener implements ActionListener {
+	class RegisterEnterListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String id = registerView.getId(); // 뷰로부터 입력된 정보를 get
@@ -89,7 +94,7 @@ public class SendController { // 클라이언트에서 발생한 이벤트를 처리하고 서버에 
 		}
 	}
 	// 취소 버튼 리스너(회원가입 뷰)
-	class CancelListener implements ActionListener {
+	class RegisterCancelListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			registerView.dispose(); // 회원가입 뷰 닫기

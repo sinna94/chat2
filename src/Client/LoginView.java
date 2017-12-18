@@ -21,11 +21,12 @@ public class LoginView extends JFrame{
 	private JTextField pwdField = new JTextField();
 	private JButton loginBtn = new JButton("로그인");
 	private JButton registerBtn = new JButton("회원가입");
-	private Font font = new Font("Serif", Font.BOLD, 40);
+	private Font font = new Font("Serif", Font.BOLD, 30);
 	
 	public LoginView() {
 		JPanel title = new JPanel();
 		titleLabel.setFont(font);
+		titleLabel.setHorizontalAlignment(JLabel.CENTER); // 가운데 정렬
 		title.add(titleLabel);
 		this.add(title, BorderLayout.NORTH);
 		JPanel content = new JPanel();

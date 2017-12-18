@@ -16,7 +16,7 @@ public class DAO {
 		간결한 코드를 위해
 	*/
 	private Connection con = null;
-	public PreparedStatement pstmt = null;
+	private PreparedStatement pstmt = null;
 	private final String DB_URL = "jdbc:mysql://localhost/bodybody?useSSL=false";
 	
 	public DAO(){
@@ -35,23 +35,19 @@ public class DAO {
 	}
 
 	public boolean checkLoginDB(Account account) throws SQLException {
-		String query = "SELECT * FROM Account WHERE ID = ?, Password = ?";
+		String query = "SELECT * FROM Account WHERE ID = ? AND Password = ?";
 		
 		pstmt = con.prepareStatement(query); // PreparedStatement 객체 생성
 		pstmt.setString(1, account.getId()); // 아이디 세팅
 		pstmt.setString(2, account.getPassword()); // 비밀번호 세팅
 		ResultSet rs = pstmt.executeQuery(); // 데이터를 검색하므로 executeQuery를 사용한다
-		
+
 		while(rs.next()) {
 			account.setId(rs.getString("ID")); // 데이터베이스로부터 아이디와 이름을 받는다
 			account.setName(rs.getString("Name"));
+			return true; // rs가 있으면 true
 		}
-		rs.close();
-		pstmt.close();
-		
-		if(account.getId() == null) // 검색된 내용이 없으면 false
-			return false;
-		else return true;
+		return false; // rs가 없으면 false
 	}
 
 	public int registDB(Account account) throws SQLException {
@@ -61,8 +57,8 @@ public class DAO {
 		String phone = account.getPhone();
 		String addr = account.getAddress();
 		
-		String query = "INSERT INTO Student ('" + id + "','" + pw + "','" + name + "','" + phone + "','" + addr  +"')"
-	            + "VALUES(?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Account ('" + id + "','" + pw + "','" + name + "','" + phone + "','" + addr + "')"
+				+ "VALUES(?, ?, ?, ?, ?, ?)";
 		
 		pstmt = con.prepareStatement(query);
 		pstmt.setString(1, id);

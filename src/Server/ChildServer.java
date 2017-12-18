@@ -30,8 +30,8 @@ public class ChildServer extends Thread {
 			while (true) {
 				packet = (Packet) ois.readObject(); // 패킷 받기
 				switch (packet.getCode()) { // 패킷 해석
-				case "REQ_LOGIN":			// 로그인 요청
-					checkLogin((Account)packet.getData());
+				case "REQ_LOGIN": // 로그인 요청
+					checkLogin((Account) packet.getData()); // 아이디와 비밀번호 체크
 					break;
 					
 				case "REQ_REGISTER":			// 회원가입 요청
@@ -72,7 +72,7 @@ public class ChildServer extends Thread {
 			packet.setCode("REGI_FAIL");
 		}
 		else{
-			packet.setCode("REGI_SUCC");
+			packet.setCode("REGI_SUC");
 		}
 		
 		sendPacket(packet);

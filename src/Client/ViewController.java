@@ -5,13 +5,12 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import DTO.Account;
+import DTO.Friend;
 import DTO.Packet;
 
 public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 클래스(controller)
@@ -43,6 +42,19 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 	
 	public void setMainView(MainView mainView) { // 메인뷰를 참조하는 메소드
 		this.mainView = mainView;
+	}
+	
+	public void setFriendList() {
+		String friendState = "접속 중";
+		ArrayList<Friend> friendList = clntModel.getMyFriends(); // 모델로부터 친구목록을 가져온다
+		DefaultTableModel tableModel = mainView.getFriendTabel(); // 친구목록 테이블의 모델을 참조
+		tableModel.setNumRows(0); // 친구 목록 초기화
+		for(int i = 0; i < friendList.size(); i++) {
+			tableModel.insertRow(0, new Object[] {
+					friendList.get(i).getFriendId(), // 친구 아이디
+					friendState, // 친구 상태
+				}); 
+		}
 	}
 	
 	public void addMainViewListener() { // 메인뷰에 리스너를 달아주는 메소드
@@ -178,6 +190,7 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			mainView.dispose(); // 메인 뷰 닫기
+			System.exit(0);
 		}
 	}
 }

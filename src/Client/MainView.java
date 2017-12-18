@@ -55,8 +55,8 @@ public class MainView extends JFrame { // 메인 뷰 클래스
 		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
 	    dtcr.setHorizontalAlignment(SwingConstants.CENTER); // 렌더러의 가로정렬을 CENTER
 		// 대국 목록 테이블 정의
-		String[] col = { "아이디", "이름", "상태" }; // 첫행에 표시될 배열
-		String[][] row = new String[0][3];
+		String[] col = { "아이디", "상태" }; // 첫행에 표시될 배열
+		String[][] row = new String[0][2];
 
 		model = new DefaultTableModel(row, col) { // 테이블 모델 생성
 			private static final long serialVersionUID = 1L;
@@ -79,27 +79,27 @@ public class MainView extends JFrame { // 메인 뷰 클래스
 		this.setTitle("Main View");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-
-	public void showError(String errMessage) {
-		JOptionPane.showMessageDialog(this, errMessage);
+	// 친구목록 테이블을 리턴하는 메소드
+	public DefaultTableModel getFriendTabel() {
+		return this.model;
 	}
-
+	// 친구추가 버튼 리스너를 추가하는 메소드
 	public void addAddListener(ActionListener aal) {
 		addBtn.addActionListener(aal);
 	}
-
+	// 친구삭제 버튼 리스너를 추가하는 메소드
 	public void addRemoveListener(ActionListener ral) {
 		removeBtn.addActionListener(ral);
 	}
-	
+	// 쪽지보내기 버튼 리스너를 추가하는 메소드
 	public void addMsgListener(ActionListener mal) {
 		msgBtn.addActionListener(mal);
 	}
-	
+	// 대화하기 버튼 리스너를 추가하는 메소드
 	public void addChatListener(ActionListener cal) {
 		chatBtn.addActionListener(cal);
 	}
-	
+	// 종료 버튼 리스너를 추가하는 메소드
 	public void addExitListener(ActionListener eal) {
 		exitBtn.addActionListener(eal);
 	}

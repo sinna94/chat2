@@ -3,9 +3,11 @@ package Client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import DTO.Friend;
 import DTO.Packet;
 
 public class RecieveController extends Thread { // 서버로부터 패킷을 받는 클래스(controller)
@@ -37,6 +39,11 @@ public class RecieveController extends Thread { // 서버로부터 패킷을 받는 클래스
 						break;
 					case "LOGIN_FAIL": // 로그인 실패시 메시지 출력
 						JOptionPane.showMessageDialog(null, "로그인 실패");
+						break;
+					case "FRIEND_LIST":
+						// 클라이언트 모델에 친구목록을 set
+						clntModel.setMyFriends((ArrayList<Friend>) packet.getData());
+						vc.setFriendList(); // 메인뷰에 친구목록을 출력하는 뷰컨트롤러의 메소드 호출
 						break;
 					case "REGI_SUC":  // 회원가입 성공시 메시지 출력
 						JOptionPane.showMessageDialog(null, "회원가입 성공");

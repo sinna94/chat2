@@ -71,6 +71,14 @@ public class ChildServer extends Thread {
 		else packet.setCode("LOGIN_FAIL");
 		// 패킷 전송
 		sendPacket(packet);
+		sendFriendList(account); // 친구 목록 보내기
+	}
+	
+	public void sendFriendList(Account account) throws SQLException {
+		packet.setCode("FRIEND_LIST");
+		// 데이터베이스에서 친구목록을 가져와서 패킷에 담는다
+		packet.setData(dao.getFriendList(account));
+		sendPacket(packet);
 	}
 	
 	public void regist(Account account) throws SQLException {

@@ -5,8 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import DTO.Account;
+import DTO.Friend;
 
 public class DAO {
 	/*  PreparedStatement 사용 이유
@@ -48,7 +50,23 @@ public class DAO {
 		}
 		return false; // rs가 없으면 false
 	}
+	
+	public ArrayList<Friend> getFriendList(Account account) throws SQLException {
+		ArrayList<Friend> friendList = new ArrayList<Friend>(); // 친구목록을 담을 ArrayList 생성
+		String query = "SELECT * FROM Friends WHERE UserID = ?";
+		
+		pstmt = con.prepareStatement(query); // PreparedStatement 객체 생성
+		pstmt.setString(1, account.getId()); // 자신의 아이디 세팅
+		ResultSet rs = pstmt.executeQuery(); // 데이터를 검색하므로 executeQuery를 사용한다
 
+		while(rs.next()) {
+			Friend friend = new Friend(); // friend 객체 생성
+			friend.setFriendId(rs.getString("FriendID")); // 데이터베이스로부터 친구 아이디를 받는다
+			friendList.add(friend); // ArrayList에 담는다
+		}
+		return friendList; // 친구목록 반환
+	}
+	
 	public boolean registDB(Account account) throws SQLException {
 		String id = account.getId();
 		String pw = account.getPassword();

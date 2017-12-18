@@ -79,8 +79,13 @@ public class MainView extends JFrame { // 메인 뷰 클래스
 		this.setTitle("Main View");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+
 	// 친구목록 테이블을 리턴하는 메소드
-	public DefaultTableModel getFriendTabel() {
+	public JTable getFriendTabel() {
+		return this.friendTable;
+	}
+	// 친구목록 테이블모델을 리턴하는 메소드
+	public DefaultTableModel getFriendTabelModel() {
 		return this.model;
 	}
 	// 친구추가 버튼 리스너를 추가하는 메소드

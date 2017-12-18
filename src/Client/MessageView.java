@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -19,8 +18,10 @@ public class MessageView extends JFrame{
 	private JButton enterBtn = new JButton("입력");
 	private JButton exitBtn = new JButton("종료");
 	private Font font = new Font("Serif", Font.BOLD, 30);
+	private String selectId;
 	
-	public MessageView() {
+	public MessageView(String selectId) {
+		this.selectId = selectId;
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 		titleLabel.setFont(font);
@@ -35,13 +36,16 @@ public class MessageView extends JFrame{
 		this.add(mainPanel); // 메인패널 배치
 		this.setBounds(500, 300, 300, 200);
 		this.setTitle("Login View");
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-	
-	public void showError(String errMessage) {
-		JOptionPane.showMessageDialog(this, errMessage);
 	}
 
+	public String getSelectId() {
+		return selectId;
+	}
+	
+	public String getMsg() {
+		return textField.getText();
+	}
+	
 	public void addEnterListener(ActionListener lal) {
 		enterBtn.addActionListener(lal);
 	}

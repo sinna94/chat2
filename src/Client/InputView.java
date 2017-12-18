@@ -39,10 +39,6 @@ public class InputView extends JFrame { // 입력 뷰 클래스(친구 추가, 친구 삭제에
 	public String getText() { // 텍스트 필드값 가져오기
 		return txtField.getText();
 	}
-	
-	public void showError(String errMessage) {
-		JOptionPane.showMessageDialog(this, errMessage);
-	}
 
 	public void addEnterListener(ActionListener eal) {
 		enter.addActionListener(eal);

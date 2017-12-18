@@ -55,6 +55,11 @@ public class ChildServer extends Thread {
 				case "REQ_REMOVE": // 친구 삭제 요청
 					removeFriend((String) packet.getData());
 					break;
+				
+				case "REQ_MSG": // 쪽지보내기 요청
+					sendMessage((String) packet.getData());
+					break;
+					
 				default:
 					break;
 				}
@@ -152,6 +157,22 @@ public class ChildServer extends Thread {
 		else packet.setCode("REMOVE_FAIL");
 		// 패킷 전송
 		sendPacket(packet);
+	}
+	
+	public void sendMessage(String data) {
+		StringTokenizer st = new StringTokenizer(data, "#"); // #으로 구분된 문자열을 분리
+		String otherId = st.nextToken(); // 첫번째 토큰은 메시지를 보낼 ID
+		String msg = st.nextToken(); // 두번째 토큰은 메시지내용
+
+		for(int i = 0; i < childList.size(); i++) {
+			if(childList.get(i).getMyId().equals(otherId)) {
+				Object msgData = msg;
+				packet.setCode("SEND_MSG");
+				packet.setData(msgData);
+				sendPacket(packet);
+				break;
+			}
+		}
 	}
 	
 	public void sendPacket(Packet packet){

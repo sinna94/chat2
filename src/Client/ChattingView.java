@@ -72,11 +72,6 @@ public class ChattingView extends JFrame{
 		this.add(mainPanel); // 전체를 감싸는 패널 추가
 		this.setBounds(500, 200, 500, 400);
 		this.setTitle("Chatting View");
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
-	public void showError(String errMessage) {
-		JOptionPane.showMessageDialog(this, errMessage);
 	}
 
 	public void addEnterListener(ActionListener aal) {

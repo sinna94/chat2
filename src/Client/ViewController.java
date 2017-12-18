@@ -2,11 +2,15 @@ package Client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import DTO.Account;
@@ -47,7 +51,7 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 	public void setFriendList() {
 		String friendState = "접속 중";
 		ArrayList<Friend> friendList = clntModel.getMyFriends(); // 모델로부터 친구목록을 가져온다
-		DefaultTableModel tableModel = mainView.getFriendTabel(); // 친구목록 테이블의 모델을 참조
+		DefaultTableModel tableModel = mainView.getFriendTabelModel(); // 친구목록 테이블의 모델을 참조
 		tableModel.setNumRows(0); // 친구 목록 초기화
 		for(int i = 0; i < friendList.size(); i++) {
 			tableModel.insertRow(0, new Object[] {
@@ -170,19 +174,67 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 			inputView.dispose(); // 입력 뷰 닫기
 		}
 	}
+	
 	// 쪽지보내기 버튼 리스너(메인 뷰)
 	class MsgListener implements ActionListener {
+		private int selectRow = -1;
+		private String selectId;
+		private JTable friendTable;
+		public MsgListener() {
+			friendTable = mainView.getFriendTabel();
+			friendTable.addMouseListener(new MyMouseListener()); // 메인뷰의 친구목록 테이블에 마우스 리스너 추가
+		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			messageView = new MessageView();
+			if(selectRow == -1) JOptionPane.showMessageDialog(null, "메시지를 보낼 대상을 선택하세요.");
+			else {
+				messageView = new MessageView(selectId);
+				messageView.addEnterListener(new MsgEnterListener());
+				messageView.addExitListener(new MsgExitListener());
+				messageView.setVisible(true);
+			}
+		}
+		class MyMouseListener extends MouseAdapter {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+			    if (e.getButton() == 1) {
+			    	selectRow = friendTable.getSelectedRow(); // 선택한 레코드의 행에서
+					selectId = (String) friendTable.getValueAt(selectRow, 0); // 첫번째 칼럼(아이디)를 가져옴
+		    	}
+		    }
+		}
+	}
+	// 입력 버튼 리스너(메시지 뷰)
+	class MsgEnterListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// 보낼 아이디와 메시지를 합친다.(#로 구분)
+			String str = messageView.getSelectId() + "#" + messageView.getMsg();
+			Object data = str; // 스트링객체를 object로 업캐스팅(패킷의 데이터는 object형식)
+			packet.setCode("REQ_MSG"); // 패킷의 코드명을 입력(친구추가 또는 삭제)
+			packet.setData(data); // data set
+			try {
+				sendPacket(packet); // 패킷 전송
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			messageView.dispose(); // 메시지 뷰 닫기
 		}
 	}
 
+	// 취소 버튼 리스너(입력 뷰)
+	class MsgExitListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			messageView.dispose(); // 메시지 뷰 닫기
+		}
+	}
 	// 채팅하기 버튼 리스너(메인 뷰)
 	class ChatListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			chattingView = new ChattingView();
+			chattingView.setVisible(true);
 		}
 	}
 	// 종료 버튼 리스너(메인 뷰)

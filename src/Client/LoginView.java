@@ -55,10 +55,6 @@ public class LoginView extends JFrame{
 	public String getPwd() {
 		return pwdField.getText();
 	}
-	
-	public void showError(String errMessage) {
-		JOptionPane.showMessageDialog(this, errMessage);
-	}
 
 	public void addLoginListener(ActionListener lal) {
 		loginBtn.addActionListener(lal);

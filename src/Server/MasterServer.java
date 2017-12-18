@@ -15,7 +15,7 @@ public class MasterServer {
 		this.childList = new ArrayList<ChildServer>();
 		this.dao = new DAO();
 	}
-	
+	// 서버를 시작하는 메소드
 	public void start() throws IOException {
 		try{	
 			ss = new ServerSocket(port);
@@ -29,7 +29,7 @@ public class MasterServer {
 			while(true) {
 				Socket socket = ss.accept();
 				System.out.println(socket.getInetAddress() + "가 접속하였습니다.");
-				ChildServer csvr = new ChildServer(socket, dao);
+				ChildServer csvr = new ChildServer(socket, this, dao);
 				csvr.start();
 				childList.add(csvr);
 			} 
@@ -40,4 +40,8 @@ public class MasterServer {
 			ss.close();
 		}
 	}
+	// child서버의 리스트를 반환하는 메소드
+	public ArrayList<ChildServer> getChildList() {
+		return childList;
+	};
 }

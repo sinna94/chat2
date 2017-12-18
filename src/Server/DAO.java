@@ -51,12 +51,12 @@ public class DAO {
 		return false; // rs가 없으면 false
 	}
 	
-	public ArrayList<Friend> getFriendList(Account account) throws SQLException {
+	public ArrayList<Friend> getFriendList(String myId) throws SQLException {
 		ArrayList<Friend> friendList = new ArrayList<Friend>(); // 친구목록을 담을 ArrayList 생성
 		String query = "SELECT * FROM Friends WHERE UserID = ?";
 		
 		pstmt = con.prepareStatement(query); // PreparedStatement 객체 생성
-		pstmt.setString(1, account.getId()); // 자신의 아이디 세팅
+		pstmt.setString(1, myId); // 자신의 아이디 세팅
 		ResultSet rs = pstmt.executeQuery(); // 데이터를 검색하므로 executeQuery를 사용한다
 
 		while(rs.next()) {

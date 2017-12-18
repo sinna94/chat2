@@ -33,7 +33,11 @@ public class ChildServer extends Thread {
 				case "REQ_LOGIN":			// 로그인 요청
 					checkLogin((Account)packet.getData());
 					break;
-
+					
+				case "REQ_REGISTER":			// 회원가입 요청
+					regist((Account)packet.getData());
+					break;
+					
 				default:
 					break;
 				}

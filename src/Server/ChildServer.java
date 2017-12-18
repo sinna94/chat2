@@ -91,6 +91,8 @@ public class ChildServer extends Thread {
 	}
 	
 	public void checkLogout() throws SQLException {
+		// child리스트에서 자신을 삭제
+		childList.remove(this);
 		// 로그아웃할때마다 접속중인 모든 클라이언트에 친구목록이 갱신되도록 한다
 		for(int i = 0; i < childList.size(); i++) {
 			childList.get(i).sendFriendList();
@@ -98,7 +100,6 @@ public class ChildServer extends Thread {
 	}
 	
 	public void sendFriendList() throws SQLException {
-		// 마스터서버로부터 child서버의 리스트를 참조받는다
 		ArrayList<Friend> friendList = dao.getFriendList(getMyId()); // DB로부터 친구목록을 받는다
 		ArrayList<Friend> connectFriendList = new ArrayList<Friend>(); // 접속중인 친구목록을 저장할 ArrayList를 생성한다
 		// child서버의 아이디리스트와 DB에서 찾은 아이디리스트를 비교해서 접속여부를 판단한다

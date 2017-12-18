@@ -189,6 +189,12 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 	class ExitListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			packet.setCode("REQ_LOGOUT"); // 패킷의 코드명을 입력
+			try {
+				sendPacket(packet); // 패킷 전송
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			mainView.dispose(); // 메인 뷰 닫기
 			System.exit(0);
 		}

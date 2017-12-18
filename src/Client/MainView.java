@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-public class MainView extends JFrame {
+public class MainView extends JFrame { // 메인 뷰 클래스
 	private static final long serialVersionUID = 1L;
 	private JLabel titleLabel = new JLabel("환영합니다.");
 	private JButton addBtn = new JButton("친구 추가");
@@ -91,15 +91,15 @@ public class MainView extends JFrame {
 		removeBtn.addActionListener(ral);
 	}
 	
-	public void addMsgListener(ActionListener ral) {
-		msgBtn.addActionListener(ral);
+	public void addMsgListener(ActionListener mal) {
+		msgBtn.addActionListener(mal);
 	}
 	
-	public void addChatListener(ActionListener ral) {
-		chatBtn.addActionListener(ral);
+	public void addChatListener(ActionListener cal) {
+		chatBtn.addActionListener(cal);
 	}
 	
-	public void addExitListener(ActionListener ral) {
-		exitBtn.addActionListener(ral);
+	public void addExitListener(ActionListener eal) {
+		exitBtn.addActionListener(eal);
 	}
 }

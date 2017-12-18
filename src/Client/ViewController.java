@@ -6,6 +6,11 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
 import DTO.Account;
 import DTO.Packet;
 
@@ -15,6 +20,7 @@ public class ViewController { // ºä¿¡¼­ ¹ß»ýÇÑ ÀÌº¥Æ®¸¦ Ã³¸®ÇÏ°í ¼­¹ö¿¡ º¸³»´Â Å
 	private LoginView loginView;
 	private RegisterView registerView;
 	private MainView mainView;
+	private InputView inputView;
 	private MessageView messageView;
 	private ChattingView chattingView;
 	private Packet packet;
@@ -23,8 +29,13 @@ public class ViewController { // ºä¿¡¼­ ¹ß»ýÇÑ ÀÌº¥Æ®¸¦ Ã³¸®ÇÏ°í ¼­¹ö¿¡ º¸³»´Â Å
 		this.oos = new ObjectOutputStream(socket.getOutputStream());
 		this.clientModel = clientModel;
 		this.loginView = loginView;
-		loginView.addLoginListener(new LoginListener());
-		loginView.addRegisterListener(new RegisterListener());
+		loginView.addLoginListener(new LoginListener()); // ·Î±×ÀÎ¹öÆ° ¸®½º³Ê(·Î±×ÀÎ ºä)
+		loginView.addRegisterListener(new RegisterListener()); // È¸¿ø°¡ÀÔ¹öÆ° ¸®½º³Ê(·Î±×ÀÎ ºä)
+		mainView.addAddListener(new InputListener("REQ_ADD")); // Ä£±¸Ãß°¡¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
+		mainView.addRemoveListener(new InputListener("REQ_REMOVE")); // Ä£±¸»èÁ¦¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
+		mainView.addMsgListener(new MsgListener()); // ÂÊÁöº¸³»±â¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
+		mainView.addChatListener(new ChatListener()); // Ã¤ÆÃÇÏ±â¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
+		mainView.addExitListener(new ExitListener()); // Á¾·á¹öÆ° ¸®½º³Ê (¸ÞÀÎ ºä)
 		this.packet = new Packet();
 	}
 	
@@ -102,6 +113,68 @@ public class ViewController { // ºä¿¡¼­ ¹ß»ýÇÑ ÀÌº¥Æ®¸¦ Ã³¸®ÇÏ°í ¼­¹ö¿¡ º¸³»´Â Å
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			registerView.dispose(); // È¸¿ø°¡ÀÔ ºä ´Ý±â
+		}
+	}
+	// ÀÔ·Â ºä(Ä£±¸Ãß°¡, »èÁ¦) ¸®½º³Ê(¸ÞÀÎ ºä)
+	class InputListener implements ActionListener {
+		private String code;
+		public InputListener(String code) {
+			this.code = code;
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			inputView = new InputView(code);
+			// ÀÔ·Â¹öÆ°ÀÇ ¸®½º³Ê¿¡ code¸¦ ³Ö¾îÁØ´Ù(Ãß°¡, »èÁ¦¸¦ ±¸ºÐÇÏ°¡À§ÇÔ)
+			inputView.addEnterListener(new InputEnterListener(code)); 
+			inputView.addCancelListener(new InputCancelListener());
+			inputView.setVisible(true);
+		}
+	}
+	// ÀÔ·Â ¹öÆ° ¸®½º³Ê(ÀÔ·Â ºä)
+	class InputEnterListener implements ActionListener {
+		private String code;
+		public InputEnterListener(String code) {
+			this.code = code;
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object data = inputView.getText(); // ½ºÆ®¸µ°´Ã¼¸¦ object·Î ¾÷Ä³½ºÆÃ(ÆÐÅ¶ÀÇ µ¥ÀÌÅÍ´Â objectÇü½Ä)
+			packet.setCode(code); // ÆÐÅ¶ÀÇ ÄÚµå¸íÀ» ÀÔ·Â(Ä£±¸Ãß°¡ ¶Ç´Â »èÁ¦)
+			packet.setData(data); // data set
+			try {
+				sendPacket(packet); // ÆÐÅ¶ Àü¼Û
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+	// Ãë¼Ò ¹öÆ° ¸®½º³Ê(ÀÔ·Â ºä)
+	class InputCancelListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			inputView.dispose(); // ÀÔ·Â ºä ´Ý±â
+		}
+	}
+	// ÂÊÁöº¸³»±â ¹öÆ° ¸®½º³Ê(¸ÞÀÎ ºä)
+	class MsgListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			inputView.dispose(); // ÀÔ·Â ºä ´Ý±â
+		}
+	}
+
+	// Ã¤ÆÃÇÏ±â ¹öÆ° ¸®½º³Ê(¸ÞÀÎ ºä)
+	class ChatListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			inputView.dispose(); // ÀÔ·Â ºä ´Ý±â
+		}
+	}
+	// Á¾·á ¹öÆ° ¸®½º³Ê(¸ÞÀÎ ºä)
+	class ExitListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mainView.dispose(); // ÀÔ·Â ºä ´Ý±â
 		}
 	}
 }

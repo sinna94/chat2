@@ -208,8 +208,8 @@ public class ViewController { // 뷰에서 발생한 이벤트를 처리하고 서버에 보내는 �
 	class MsgEnterListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// 보낼 아이디와 메시지를 합친다.(#로 구분)
-			String str = messageView.getSelectId() + "#" + messageView.getMsg();
+			// 자신의아이디와 보낼 아이디, 메시지를 합친다.(#로 구분)
+			String str = clntModel.getMyId() + "#" + messageView.getSelectId() + "#" + messageView.getMsg();
 			Object data = str; // 스트링객체를 object로 업캐스팅(패킷의 데이터는 object형식)
 			packet.setCode("REQ_MSG"); // 패킷의 코드명을 입력(친구추가 또는 삭제)
 			packet.setData(data); // data set

@@ -161,12 +161,13 @@ public class ChildServer extends Thread {
 	
 	public void sendMessage(String data) {
 		StringTokenizer st = new StringTokenizer(data, "#"); // #으로 구분된 문자열을 분리
-		String otherId = st.nextToken(); // 첫번째 토큰은 메시지를 보낼 ID
-		String msg = st.nextToken(); // 두번째 토큰은 메시지내용
-
+		String myId = st.nextToken(); // 첫번째 토큰은 자신의 ID
+		String otherId = st.nextToken(); // 두번째 토큰은 메시지를 보낼 ID
+		String msg = st.nextToken(); // 세번째 토큰은 메시지내용
+		String msgString = myId + "님의 메시지:" + msg; // 전송 메시지
 		for(int i = 0; i < childList.size(); i++) {
 			if(childList.get(i).getMyId().equals(otherId)) {
-				Object msgData = msg;
+				Object msgData = msgString;
 				packet.setCode("SEND_MSG");
 				packet.setData(msgData);
 				sendPacket(packet);

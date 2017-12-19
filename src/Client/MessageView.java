@@ -35,7 +35,7 @@ public class MessageView extends JFrame{
 		mainPanel.add(btnPanel, BorderLayout.SOUTH); // 버튼패널은 남쪽
 		this.add(mainPanel); // 메인패널 배치
 		this.setBounds(500, 300, 300, 200);
-		this.setTitle("Login View");
+		this.setTitle("Message View");
 	}
 
 	public String getSelectId() {
